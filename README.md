@@ -4,6 +4,21 @@
 
 界面用 tkinter 手写（不依赖任何 GUI 框架），浏览器自动化用 Playwright 驱动**你本机已有的 Edge / Chrome**——程序不会去下载浏览器内核，也不会上传任何东西。
 
+## 直接下载就能用（推荐）
+
+👉 **[点这里下载完整版 v2.25](https://github.com/leoncc9/douyin-spark-keeper/releases/latest)**
+
+下载 zip → 解压到任意目录 → 双击 `DouyinSparkKeeper.exe`，**不需要装 Python**（包里内置了运行环境，解压后约 160MB）。
+
+首次使用：
+
+1. 点「扫码登录」——用手机抖音扫一次码（登录态只存在本机 `browser_data/`，不会外传）
+2. 点「同步账户表情」——把你账号里的表情拉下来备用
+3. 点「读取抖音列表」——右边面板列出你的好友 / 群聊
+4. **双击右边某个好友** → 加进左边的目标列表
+5. **双击左边那一行** → 设置「发什么」和「几点发」
+6. 点「一键续火花」立刻试一轮；点「启动自动模式」交给它每天自己跑
+
 ## 它能干什么
 
 - **读取会话列表**：一键拉取你抖音里的好友 / 群聊，显示头像、昵称、聊天天数、今日火花状态
@@ -15,28 +30,24 @@
 - **演练模式**：只输入、只定位、绝不回车，换电脑或抖音改版后可以先自测
 - **单实例保护、深浅色主题、自绘通知、日志面板**
 
-## 怎么跑
+## 从源码跑（开发者）
 
-要求：Windows 10 / 11（64 位），系统里已经装了 **Microsoft Edge 或 Google Chrome**（用系统自带的那个就行）。
+要求：Windows 10 / 11（64 位），系统里已经装了 **Microsoft Edge 或 Google Chrome**。
+
+仓库里**只有源码**，不含 `runtime/`（内置 Python 运行时约 160MB，放在 Release 的完整包里）。
+
+```bat
+pip install playwright
+python app\main.py            :: 直接跑
+python app\main.py --selftest :: 自检，不打开浏览器
+```
 
 ```
-DouyinSparkKeeper.exe     双击启动
-调试启动.bat                带控制台启动（排查问题用）
+DouyinSparkKeeper.exe     双击启动（需要同目录有 runtime/，即完整版）
+调试启动.bat                带控制台启动，排查问题用
 ```
 
-> ⚠️ 本仓库**不含 `runtime/`**（内置的 Python 运行时，约 160MB）。想直接跑起来，请使用完整发布包；
-> 只 clone 源码的话，需要自己准备 Python 3.12 环境并 `pip install playwright`。
-
-首次使用流程：
-
-1. 点「扫码登录」——用手机抖音扫一次码（登录态存在本机 `browser_data/`，不会外传）
-2. 点「读取抖音列表」——右边面板列出你的好友
-3. **双击右边某个好友** → 加进左边的目标列表
-4. **双击左边那一行** → 设置"发什么"（文字 / 超级表情）和"几点发"
-5. 点「一键续火花」立刻试一轮
-6. 点「启动自动模式」→ 交给它每天自己跑
-
-更详细的逐步说明看 **[使用说明.md](使用说明.md)**（右上角「操作说明」按钮里也是同一份）。
+更详细的逐步说明看 **[使用说明.md](使用说明.md)**（程序右上角「操作说明」按钮里也是同一份）。
 
 ## 源码结构
 
@@ -50,17 +61,24 @@ DouyinSparkKeeper.exe     双击启动
 | `app/autostart.py` | 开机自启（写注册表 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`） |
 | `app/single_instance.py` | 单实例互斥体（重复双击不会开出第二个） |
 | `app/logger.py` | 按月写 `logs/keeper_YYYYMM.log` |
-| `打包分发.ps1` | 生成一份剔除了个人数据、可直接发给朋友的副本 |
-| `开发交接.md` | 开发过程、版本记录、每个版本为什么这么改（中文笔记） |
+| `打包分发.ps1` | 生成一份剔除了个人数据、可直接发给朋友的完整副本 |
 | `使用说明.md` | 面向使用者的说明 |
+
+## 打包给朋友
+
+```powershell
+powershell -ExecutionPolicy Bypass -File 打包分发.ps1
+```
+
+会生成 `抖音续火花_分发版/`：复制 `app/` + `runtime/`，自动剔除 `browser_data/`、`config.json`（连同 `config.json.bak-*` 备份）、`conversations.json`、`stickers.json`、`logs/`、`avatars/`、`stickers/` 等个人数据，再写一份默认配置（占位好友 A/B/C/D）。收到的人解压双击就能用。
 
 ## 关于隐私
 
 仓库里**不含**任何账号数据或本机产物，它们都在 `.gitignore` 里：
 
-`browser_data/`（登录态 cookie）、`config.json`、`conversations.json`、`stickers.json`、`logs/`、`avatars/`、`stickers/`、`runtime/`。
+`browser_data/`（登录态 cookie）、`config.json` 及 `config.json.bak-*`、`conversations.json`、`stickers.json`、`logs/`、`avatars/`、`stickers/`、`runtime/`。
 
-首次运行时会自动生成一份默认 `config.json`。
+首次运行时会自动生成一份默认 `config.json`。Release 里的完整包同样已剔除上述数据，你登录的是你自己的账号。
 
 ## 注意
 
