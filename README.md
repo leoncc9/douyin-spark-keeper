@@ -57,16 +57,8 @@ python app\main.py
 | `app/autostart.py` | 开机自启（写注册表 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`） |
 | `app/single_instance.py` | 单实例互斥体（重复双击不会开出第二个） |
 | `app/logger.py` | 按月写 `logs/keeper_YYYYMM.log` |
-| `pack.ps1` | 生成一份剔除了个人数据、可直接发给朋友的完整副本 |
+| `pack.ps1` | 维护者用：把源码 + 运行时打成一个干净的完整包（Release 里那个 zip 就是它生成的） |
 | `使用说明.md` | 面向使用者的说明 |
-
-## 打包给朋友
-
-```powershell
-powershell -ExecutionPolicy Bypass -File pack.ps1
-```
-
-会生成 `抖音续火花_分发版/`：复制 `app/` + `runtime/`，自动剔除所有与你账号绑定的数据（登录态、好友列表、会话缓存、收藏的表情、日志、头像缓存），再写一份默认配置。收到的人解压双击就能用。
 
 ## 关于隐私
 
