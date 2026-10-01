@@ -1,0 +1,33 @@
+# ---- 绝对不要上传：你自己的账号数据 ----
+# 浏览器登录态（含抖音 cookie，泄露等于账号被人拿走）
+browser_data/
+# 你的真实目标列表（好友昵称、会话 ID）、会话状态、表情库清单
+config.json
+config.json.bak-*
+conversations.json
+stickers.json
+# 开发交接.md：开发过程记录（含真实好友昵称、会话 ID、本机路径），只留本机
+开发交接.md
+# 运行日志（含好友昵称、发送时间）
+logs/
+# 头像缓存 / 你账号收藏的表情原图
+avatars/
+stickers/
+
+# ---- 本机运行时（约 160MB，仓库里不放） ----
+runtime/
+build/
+dist/
+*.spec
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# ---- 编辑器 / 系统 ----
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
