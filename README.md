@@ -38,7 +38,7 @@
 
 `browser_data/`（登录态 cookie）、`config.json` 及 `config.json.bak-*`、`conversations.json`、`stickers.json`、`logs/`、`avatars/`、`stickers/`、`runtime/`。
 
-首次运行时会自动生成一份默认 `config.json`。Release 里的完整包同样已剔除上述数据，你登录的是你自己的账号。
+首次运行时会自动生成一份默认 `config.json`。Release 里的完整包同样已剔除上述数据，使用者登录的是自己的账号。
 
 ## 注意
 
