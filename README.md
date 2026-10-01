@@ -38,14 +38,10 @@
 
 ```bat
 pip install playwright
-python app\main.py            :: 直接跑
-python app\main.py --selftest :: 自检，不打开浏览器
+python app\main.py
 ```
 
-```
-DouyinSparkKeeper.exe     双击启动（需要同目录有 runtime/，即完整版）
-调试启动.bat                带控制台启动，排查问题用
-```
+加 `--selftest` 可以只做自检、不打开浏览器。想双击启动就用 Release 里的完整版（`DouyinSparkKeeper.exe`）；要盯着控制台排查问题，用 `调试启动.bat`。
 
 更详细的逐步说明看 **[使用说明.md](使用说明.md)**（程序右上角「操作说明」按钮里也是同一份）。
 
@@ -70,7 +66,7 @@ DouyinSparkKeeper.exe     双击启动（需要同目录有 runtime/，即完整
 powershell -ExecutionPolicy Bypass -File pack.ps1
 ```
 
-会生成 `抖音续火花_分发版/`：复制 `app/` + `runtime/`，自动剔除 `browser_data/`、`config.json`（连同 `config.json.bak-*` 备份）、`conversations.json`、`stickers.json`、`logs/`、`avatars/`、`stickers/` 等个人数据，再写一份默认配置（占位好友 A/B/C/D）。收到的人解压双击就能用。
+会生成 `抖音续火花_分发版/`：复制 `app/` + `runtime/`，自动剔除所有与你账号绑定的数据（登录态、好友列表、会话缓存、收藏的表情、日志、头像缓存），再写一份默认配置。收到的人解压双击就能用。
 
 ## 关于隐私
 
