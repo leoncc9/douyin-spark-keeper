@@ -61,13 +61,13 @@ DouyinSparkKeeper.exe     双击启动（需要同目录有 runtime/，即完整
 | `app/autostart.py` | 开机自启（写注册表 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`） |
 | `app/single_instance.py` | 单实例互斥体（重复双击不会开出第二个） |
 | `app/logger.py` | 按月写 `logs/keeper_YYYYMM.log` |
-| `打包分发.ps1` | 生成一份剔除了个人数据、可直接发给朋友的完整副本 |
+| `pack.ps1` | 生成一份剔除了个人数据、可直接发给朋友的完整副本 |
 | `使用说明.md` | 面向使用者的说明 |
 
 ## 打包给朋友
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File 打包分发.ps1
+powershell -ExecutionPolicy Bypass -File pack.ps1
 ```
 
 会生成 `抖音续火花_分发版/`：复制 `app/` + `runtime/`，自动剔除 `browser_data/`、`config.json`（连同 `config.json.bak-*` 备份）、`conversations.json`、`stickers.json`、`logs/`、`avatars/`、`stickers/` 等个人数据，再写一份默认配置（占位好友 A/B/C/D）。收到的人解压双击就能用。

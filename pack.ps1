@@ -1,8 +1,8 @@
-# 打包分发.ps1 —— 生成一份"干净、可直接发给朋友"的副本
+# pack.ps1 —— 生成一份"干净、可直接发给朋友"的副本
 #
 # 用法（在程序目录里）：
-#   powershell -ExecutionPolicy Bypass -File .\打包分发.ps1
-#   powershell -ExecutionPolicy Bypass -File .\打包分发.ps1 -Zip
+#   powershell -ExecutionPolicy Bypass -File .\pack.ps1
+#   powershell -ExecutionPolicy Bypass -File .\pack.ps1 -Zip
 #
 # 它会复制出 "抖音续火花_分发版" 目录，并剔除与本机/本人账号绑定的内容：
 #   - browser_data/   你的登录态（含账号凭证）
@@ -31,7 +31,7 @@ Write-Host "复制程序文件（跳过隐私/临时内容）…"
 robocopy $src $dst /E /XD browser_data logs build __pycache__ avatars /NFL /NDL /NJH /NJS /NP | Out-Null
 
 # 再清一遍可能被 robocopy 带过来的、与本人账号相关的内容
-foreach ($item in @("config.json", "stickers.json", "stickers", "avatars", "conversations.json", "打包分发.ps1", "开发交接.md", "logs", "build", "__pycache__")) {
+foreach ($item in @("config.json", "stickers.json", "stickers", "avatars", "conversations.json", "pack.ps1", "开发交接.md", "logs", "build", "__pycache__")) {
     $full = Join-Path $dst $item
     if (Test-Path $full) {
         Remove-Item $full -Recurse -Force -ErrorAction SilentlyContinue
