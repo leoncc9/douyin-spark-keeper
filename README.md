@@ -19,6 +19,8 @@
 5. **双击左边那一行** → 设置「发什么」和「几点发」
 6. 点「一键续火花」立刻试一轮；点「启动自动模式」交给它每天自己跑
 
+更详细的逐步说明写在 **[使用说明.md](使用说明.md)** 里，程序右上角「操作说明」按钮打开的也是同一份。
+
 ## 它能干什么
 
 - **读取会话列表**：一键拉取你抖音里的好友 / 群聊，显示头像、昵称、聊天天数、今日火花状态
@@ -29,36 +31,6 @@
 - **不会重复补发**：开机 / 启动自动模式时先**只读**看一眼抖音里今天续没续（只看火苗图标，不点进会话），只有真没续的目标才补一轮；已经发过的目标在发送前会被再确认一次并跳过
 - **演练模式**：只输入、只定位、绝不回车，换电脑或抖音改版后可以先自测
 - **单实例保护、深浅色主题、自绘通知、日志面板**
-
-## 从源码跑（开发者）
-
-要求：Windows 10 / 11（64 位），系统里已经装了 **Microsoft Edge 或 Google Chrome**。
-
-仓库里**只有源码**，不含 `runtime/`（内置 Python 运行时约 160MB，放在 Release 的完整包里）。
-
-```bat
-pip install playwright
-python app\main.py
-```
-
-加 `--selftest` 可以只做自检、不打开浏览器。想双击启动就用 Release 里的完整版（`DouyinSparkKeeper.exe`）；要盯着控制台排查问题，用 `调试启动.bat`。
-
-更详细的逐步说明看 **[使用说明.md](使用说明.md)**（程序右上角「操作说明」按钮里也是同一份）。
-
-## 源码结构
-
-| 路径 | 作用 |
-|---|---|
-| `app/main.py` | 入口（支持 `--selftest` 自检、`--tray` 直接后台启动） |
-| `app/gui.py` | 全部界面：主窗口、弹窗、托盘菜单、通知、设置、计划调度 |
-| `app/douyin.py` | 浏览器自动化：登录、读会话、发送、只读查火花状态 |
-| `app/config.py` | 配置读写、默认值与归一化 |
-| `app/tray.py` | Win32 系统托盘（ctypes 直调 Shell_NotifyIcon，无第三方依赖） |
-| `app/autostart.py` | 开机自启（写注册表 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`） |
-| `app/single_instance.py` | 单实例互斥体（重复双击不会开出第二个） |
-| `app/logger.py` | 按月写 `logs/keeper_YYYYMM.log` |
-| `pack.ps1` | 维护者用：把源码 + 运行时打成一个干净的完整包（Release 里那个 zip 就是它生成的） |
-| `使用说明.md` | 面向使用者的说明 |
 
 ## 关于隐私
 
@@ -73,3 +45,40 @@ python app\main.py
 - 本工具会驱动你自己的浏览器、用你自己的登录态给好友发消息，**使用风险请自行判断**。
 - 建议不要把目标间隔调得太小（默认 3~12 秒），发送频率过高可能触发平台风控。
 - 仅供个人学习与自用，请勿用于骚扰他人或任何商业用途。
+
+---
+
+<details>
+<summary><b>想自己跑源码 / 看代码结构？（点开）</b></summary>
+
+<br>
+
+### 从源码跑
+
+要求：Windows 10 / 11（64 位），系统里已经装了 **Microsoft Edge 或 Google Chrome**。
+
+仓库里**只有源码**，不含 `runtime/`（内置 Python 运行时约 160MB，放在 Release 的完整包里）。
+
+```bat
+pip install playwright
+python app\main.py
+```
+
+加 `--selftest` 可以只做自检、不打开浏览器。想双击启动就用 Release 里的完整版（`DouyinSparkKeeper.exe`）；要盯着控制台排查问题，用 `调试启动.bat`。
+
+### 源码结构
+
+| 路径 | 作用 |
+|---|---|
+| `app/main.py` | 入口（支持 `--selftest` 自检、`--tray` 直接后台启动） |
+| `app/gui.py` | 全部界面：主窗口、弹窗、托盘菜单、通知、设置、计划调度 |
+| `app/douyin.py` | 浏览器自动化：登录、读会话、发送、只读查火花状态 |
+| `app/config.py` | 配置读写、默认值与归一化 |
+| `app/tray.py` | Win32 系统托盘（ctypes 直调 Shell_NotifyIcon，无第三方依赖） |
+| `app/autostart.py` | 开机自启（写注册表 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`） |
+| `app/single_instance.py` | 单实例互斥体（重复双击不会开出第二个） |
+| `app/logger.py` | 按月写 `logs/keeper_YYYYMM.log` |
+| `pack.ps1` | 维护者用：把源码 + 运行时打成一个干净的完整包（Release 里那个 zip 就是它生成的） |
+| `使用说明.md` | 面向使用者的说明 |
+
+</details>
