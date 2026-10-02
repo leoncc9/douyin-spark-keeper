@@ -1,4 +1,4 @@
-# pack.ps1 —— 生成一份"干净、可直接发给朋友"的副本
+﻿# pack.ps1 —— 生成一份"干净、可直接发给朋友"的副本
 #
 # 用法（在程序目录里）：
 #   powershell -ExecutionPolicy Bypass -File .\pack.ps1
