@@ -2295,6 +2295,8 @@ class DouyinClient:
 def _abs(p):
     # 从资源管理器「复制文件地址」粘来的路径会带一层引号，先剥掉再判断绝对/相对
     p = (p or "").strip().strip("\"'“”").strip()
+    if not p:
+        return ""
     if os.path.isabs(p):
         return p
     return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), p)

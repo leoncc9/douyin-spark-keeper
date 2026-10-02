@@ -3824,4 +3824,6 @@ class SparkKeeperApp:
 
 def _abs(p):
     p = (p or "").strip().strip("\"'“”").strip()
+    if not p:
+        return ""
     return p if os.path.isabs(p) else os.path.join(config.BASE_DIR, p)
