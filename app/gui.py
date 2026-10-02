@@ -11,7 +11,7 @@ import socket
 import threading
 import tkinter as tk
 import tkinter.font as tkfont
-from tkinter import messagebox, ttk
+from tkinter import messagebox, ttk, filedialog
 
 import autostart
 import config
@@ -2755,8 +2755,22 @@ class SparkKeeperApp:
         note(c2, "点「选择表情」按图挑一个（先在主界面点一次「同步超级表情」把表情库拉下来）。")
         image_v = tk.StringVar(value=cur.get("image_path") or "")
         r = row(c2, "本地图片")
-        tk.Entry(r, textvariable=image_v, font=FONT, width=30).pack(side="left")
-        note(c2, "表情包图片路径，如 sticks/meme.png（相对程序目录）；不发图片就留空。")
+        tk.Entry(r, textvariable=image_v, font=FONT, width=24).pack(side="left")
+
+        def pick_image():
+            p = filedialog.askopenfilename(
+                parent=dlg, title="选一张要发的图片",
+                filetypes=[("图片", "*.png *.jpg *.jpeg *.gif *.webp"), ("所有文件", "*.*")])
+            if p:
+                image_v.set(p)
+
+        bf2 = tk.Frame(r, bg=BG_CARD)
+        bf2.pack(side="left", padx=(6, 0))
+        RoundedButton(bf2, "选择图片", pick_image, kind="normal", padx=12,
+                      height=30, bg=BG_CARD).pack(side="left")
+        RoundedButton(bf2, "清除", lambda: image_v.set(""), kind="ghost", padx=12,
+                      height=30, bg=BG_CARD).pack(side="left", padx=(6, 0))
+        note(c2, "点「选择图片」挑一张，也可以直接粘路径（相对程序目录也行）；不发图片就留空。")
 
         # ---- 卡片 3：什么时候发
         c3 = self._card(body, "什么时候发", "每天按这个时间自动发")
@@ -3809,4 +3823,5 @@ class SparkKeeperApp:
 
 
 def _abs(p):
+    p = (p or "").strip().strip("\"'“”").strip()
     return p if os.path.isabs(p) else os.path.join(config.BASE_DIR, p)

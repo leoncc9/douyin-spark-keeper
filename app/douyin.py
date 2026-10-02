@@ -1751,9 +1751,38 @@ class DouyinClient:
         await asyncio.sleep(2.5)
         lo, hi = self.sched["pause_before_send_ms"]
         await asyncio.sleep(random.uniform(lo, hi) / 1000.0)
-        await self.page.keyboard.press("Enter")
+        # 抖音选完图会弹「发送给 xxx」预览框：得点框里的「发送」，按回车不生效
+        if not await self._click_dialog_send():
+            self.log("warn", "没找到图片预览框里的「发送」按钮，改按回车试试")
+            await self.page.keyboard.press("Enter")
         await asyncio.sleep(1.5)
         return True
+
+    async def _click_dialog_send(self):
+        """在抖音的图片预览框里点「发送」；找到就点，8 秒内没等到返回 False。"""
+        js = """
+        () => {
+          const hits = [];
+          for (const el of document.querySelectorAll('*')) {
+            if (el.children.length) continue;
+            if ((el.textContent || '').trim() !== '发送') continue;
+            const r = el.getBoundingClientRect();
+            if (r.width < 8 || r.height < 8) continue;
+            hits.push([r.x + r.width / 2, r.y + r.height / 2]);
+          }
+          if (!hits.length) return null;
+          const last = hits[hits.length - 1];
+          return {n: hits.length, x: last[0], y: last[1]};
+        }
+        """
+        for _ in range(8):
+            pos = await self.page.evaluate(js)
+            if pos:
+                await self.page.mouse.click(pos["x"], pos["y"])
+                self.log("info", "已点图片预览框里的「发送」（候选 %d 个）" % pos["n"])
+                return True
+            await asyncio.sleep(1.0)
+        return False
 
     async def collect_stickers(self, stickers_dir):
         """读取当前账号的「超级表情」，并把缩略图截到 stickers/。
@@ -2264,6 +2293,8 @@ class DouyinClient:
 
 
 def _abs(p):
+    # 从资源管理器「复制文件地址」粘来的路径会带一层引号，先剥掉再判断绝对/相对
+    p = (p or "").strip().strip("\"'“”").strip()
     if os.path.isabs(p):
         return p
     return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), p)

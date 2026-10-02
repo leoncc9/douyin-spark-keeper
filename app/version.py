@@ -13,7 +13,7 @@
 """
 
 APP_NAME = "抖音续火花"
-VERSION = "2.25"
+VERSION = "2.26"
 
 
 def version_text():
